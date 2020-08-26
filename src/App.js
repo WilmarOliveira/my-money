@@ -2,10 +2,7 @@ import React from 'react';
 import Rest from './rest';
 
 const baseURL = 'https://aula-mymoney.firebaseio.com/';
-
 const { useGet, usePost, useDelete } = Rest(baseURL);
-
-const url = 'https://aula-mymoney.firebaseio.com/movimentacoes/2019-08.json';
 
 function App() {
   const data = useGet('movimentacoes/2019-08');

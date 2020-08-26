@@ -1,6 +1,11 @@
 import { useEffect, useReducer } from 'react';
 import axios from 'axios';
 
+const INITIAL_STATE = {
+    loading: false,
+    data: {}
+}
+
 const reducer = (state, action) => {
     switch(action.type) {
       case 'REQUEST':
@@ -22,10 +27,7 @@ const reducer = (state, action) => {
   const init = (baseURL) => {
 
     const useGet = (resource) => {
-        const [data, dispatch] = useReducer(reducer, {
-          loading: true,
-          data: {}
-        })
+        const [data, dispatch] = useReducer(reducer, INITIAL_STATE)
       
         useEffect(() => {
           dispatch({ type: 'REQUEST' });
@@ -38,10 +40,7 @@ const reducer = (state, action) => {
       }
 
       const usePost = (resource) => {
-        const [data, dispatch] = useReducer(reducer, {
-            loading: false,
-            data: {}
-          })
+        const [data, dispatch] = useReducer(reducer, INITIAL_STATE)
         const post = (data) => {
             dispatch({type: 'REQUEST'});
             axios.post(baseURL + resource + '.json', data)
@@ -53,10 +52,7 @@ const reducer = (state, action) => {
     }
 
     const useDelete = () => {
-        const [data, dispatch] = useReducer(reducer, {
-            loading: false,
-            data: {}
-          })
+        const [data, dispatch] = useReducer(reducer, INITIAL_STATE)
         const remove = (resource) => {
             dispatch({type: 'REQUEST'});
             axios.delete(baseURL + resource + '.json')
