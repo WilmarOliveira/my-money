@@ -1,17 +1,15 @@
 import React from 'react';
 import Rest from './rest';
-import usePost from './usePost';
-import useDelete from './useDelete';
 
 const baseURL = 'https://aula-mymoney.firebaseio.com/';
 
-const { useGet } = Rest(baseURL);
+const { useGet, usePost, useDelete } = Rest(baseURL);
 
 const url = 'https://aula-mymoney.firebaseio.com/movimentacoes/2019-08.json';
 
 function App() {
   const data = useGet('movimentacoes/2019-08');
-  const [postData, post] = usePost(url);
+  const [postData, post] = usePost('movimentacoes/2019-08');
   const [deleteData, remove] = useDelete();
 
   const saveNew = () => {
@@ -19,7 +17,7 @@ function App() {
   }
 
   const doRemove = () => {
-    remove('https://aula-mymoney.firebaseio.com/movimentacoes/2019-08/-MFXwBNnhF6ic55zvxpK.json');
+    remove('movimentacoes/2019-08/-MFXwDNzUqGTTCRn23iV');
   }
 
   return (

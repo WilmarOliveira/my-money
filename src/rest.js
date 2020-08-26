@@ -36,8 +36,41 @@ const reducer = (state, action) => {
         }, []);
         return data;
       }
+
+      const usePost = (resource) => {
+        const [data, dispatch] = useReducer(reducer, {
+            loading: false,
+            data: {}
+          })
+        const post = (data) => {
+            dispatch({type: 'REQUEST'});
+            axios.post(baseURL + resource + '.json', data)
+              .then((res) => {
+                  dispatch({ type: 'SUCCESS', data: res.data });
+              })
+          }
+          return [data, post];
+    }
+
+    const useDelete = () => {
+        const [data, dispatch] = useReducer(reducer, {
+            loading: false,
+            data: {}
+          })
+        const remove = (resource) => {
+            dispatch({type: 'REQUEST'});
+            axios.delete(baseURL + resource + '.json')
+              .then(() => {
+                  dispatch({ type: 'SUCCESS'});
+              })
+          }
+          return [data, remove];
+    }
+
       return {
-          useGet
+          useGet,
+          usePost,
+          useDelete
       }
   }
 
