@@ -1,57 +1,36 @@
-import React, { useEffect, useReducer } from 'react';
-import axios from 'axios';
+import React from 'react';
+import Rest from './rest';
+import usePost from './usePost';
+import useDelete from './useDelete';
 
-/*axios.get('https://aula-mymoney.firebaseio.com/valor.json')
-  .then(res => {
-    console.log(res);
-  })*/
+const baseURL = 'https://aula-mymoney.firebaseio.com/';
 
-/*axios.post('https://aula-mymoney.firebaseio.com/valor.json', {
-  valor2: 3000
-})
-  .then(res => {
-    console.log(res);
-  })*/
+const { useGet } = Rest(baseURL);
 
-  const url = 'https://aula-mymoney.firebaseio.com/movimentacoes/a/2019-08.json';
-
-  const reducer = (state, action) => {
-    switch(action.type) {
-      case 'REQUEST':
-        return {
-          ...state,
-          loading: true
-        };
-      case 'SUCESS':
-        return {
-          ...state,
-          loading: false,
-          data: action.data
-        }
-      default:
-        return state;
-    }
-  }
+const url = 'https://aula-mymoney.firebaseio.com/movimentacoes/2019-08.json';
 
 function App() {
-  const [data, dispatch] = useReducer(reducer, {
-    loading: true,
-    data: {}
-  })
+  const data = useGet('movimentacoes/2019-08');
+  const [postData, post] = usePost(url);
+  const [deleteData, remove] = useDelete();
 
-  useEffect(() => {
-    dispatch({ type: 'REQUEST' });
-    axios.get(url)
-      .then(res => {
-        dispatch({ type: 'SUCESS', data: res.data })
-      })
-  }, []);
+  const saveNew = () => {
+    post({ valor: 20, descricao: 'Pastel' })
+  }
+
+  const doRemove = () => {
+    remove('https://aula-mymoney.firebaseio.com/movimentacoes/2019-08/-MFXwBNnhF6ic55zvxpK.json');
+  }
 
   return (
     <div>
       <h1>My money</h1>
       {JSON.stringify(data.data)}
       {data.loading && <p>Loading...</p>}
+      <button onClick={saveNew} >Salvar</button>
+      <pre>{JSON.stringify(postData)}</pre>
+      <button onClick={doRemove} >Delete</button>
+      <pre>{JSON.stringify(deleteData)}</pre>
     </div>
   );
 }
