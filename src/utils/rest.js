@@ -35,6 +35,7 @@ const reducer = (state, action) => {
             .then(res => {
               dispatch({ type: 'SUCESS', data: res.data })
             })
+            // eslint-disable-next-line
         }, []);
         return data;
       }

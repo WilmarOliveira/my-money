@@ -1,8 +1,10 @@
 import React from 'react';
-import Rest from './rest';
+import Rest from './utils/rest';
 import Header from './elements/Header';
-import Meses from './Meses';
-import AdicionarMeses from './AdicionarMeses';
+import Home from './pages/Home';
+import Movimentacoes from './pages/Movimentacoes';
+
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 const baseURL = 'https://aula-mymoney.firebaseio.com/';
 const { useGet, usePost, useDelete } = Rest(baseURL);
@@ -22,14 +24,11 @@ function App() {
   }
 
   return (
-    <div>
+    <Router>
       <Header />
-      <div className="container" >
-        <AdicionarMeses />
-        <Meses />
-      </div>
-      
-    </div>
+      <Route exact path="/" component={Home} />
+      <Route path="/movimentacoes/:data" component={Movimentacoes} />
+    </Router>
   );
 }
 
