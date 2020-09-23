@@ -7,7 +7,7 @@ const { useGet, usePost, useDelete } = Rest(baseURL);
 const Movimentacoes = ({ match }) => {
     const data = useGet(`/movimentacoes/${match.params.data}`)
     const [descricao, setDescricao] = useState('');
-    const [valor, setValor] = useState(0);
+    const [valor, setValor] = useState('');
     const [postData, salvar] = usePost(`/movimentacoes/${match.params.data}`);
     const [removeData, remover] = useDelete();
 
@@ -20,13 +20,15 @@ const Movimentacoes = ({ match }) => {
     }
 
     const salvarMovimentacao = async() => {
-        await salvar({
-            descricao,
-            valor
-        })
-        setDescricao('');
-        setValor(0);
-        data.refetch();
+        if (!isNaN(valor) && valor.search(/^[-]?\d+(\.)?\d+?$/) >= 0) {
+            await salvar({
+                descricao,
+                valor: parseFloat(valor)
+            })
+            setDescricao('');
+            setValor('');
+            data.refetch();
+        }
     }
 
     const removerMovimentacao = async(id) => {
@@ -51,9 +53,10 @@ const Movimentacoes = ({ match }) => {
                             return (
                                 <tr key={movimentacao} >
                                     <td>{data.data[movimentacao].descricao}</td>
-                                    <td>
+                                    <td className='text-right' >
                                         {data.data[movimentacao].valor}
-                                        <button onClick={() => removerMovimentacao(movimentacao)} >-</button>
+                                        {'  '}
+                                        <button className='btn btn-danger' onClick={() => removerMovimentacao(movimentacao)} >-</button>
                                     </td>
                                 </tr>
                             )
@@ -63,7 +66,7 @@ const Movimentacoes = ({ match }) => {
                         <td><input type="text" value={descricao} onChange={onChangeDescricao} /></td>
                         <td>
                             <input type="text" value={valor} onChange={onChangeValor} />
-                            <button onClick={salvarMovimentacao} >+</button>
+                            <button className='btn btn-success'  onClick={salvarMovimentacao} >+</button>
                         </td>
                     </tr>
                 </tbody>
